@@ -35,6 +35,7 @@ class ScoringService(object):
     @classmethod
     def predict(cls, input):
         """For the input, do the predictions and return them.
+
         Args:
             input (a pandas dataframe): The data on which to do the predictions. There will be
                 one prediction per row in the dataframe"""
@@ -82,4 +83,4 @@ def transformation():
     pd.DataFrame({'results':predictions}).to_csv(out, header=False, index=False)
     result = out.getvalue()
 
-return flask.Response(response=result, status=200, mimetype='text/csv')
+    return flask.Response(response=result, status=200, mimetype='text/csv')
