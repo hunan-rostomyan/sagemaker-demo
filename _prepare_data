@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+import os
+import pickle
+import random
+
+data_path = 'data'
+
+import numpy as np
+from sklearn.datasets import load_iris as load_data
+
+# Load data
+data = load_data()
+x, y = data.data[:, :2], data.target
+
+# Shuffle
+indices = list(range(len(x)))
+random.shuffle(indices)
+x, y = x[indices], y[indices]
+
+# Split into train/test
+train_x, train_y = x[:140], y[:140]
+test_x, test_y = x[140:], y[140:]
+
+# Save
+train_path = os.path.join(data_path, 'train_data.pkl')
+test_path = os.path.join(data_path, 'test_data.pkl')
+pickle.dump((train_x, train_y), open(train_path, 'wb'))
+pickle.dump((test_x, test_y), open(test_path, 'wb'))

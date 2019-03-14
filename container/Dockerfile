@@ -1,31 +1,21 @@
-
-# Build an image that can do training and inference in SageMaker
-# This is a Python 2 image that uses the nginx, gunicorn, flask stack
-# for serving inferences in a stable way.
-
 FROM ubuntu:16.04
 
-MAINTAINER Amazon AI <sage-learner@amazon.com>
+RUN apt-get update -y && apt-get install software-properties-common -y
+RUN add-apt-repository ppa:jonathonf/python-3.6
+RUN apt-get update -y && apt-get install python3.6 libpython3.6 -y
 
-
-RUN apt-get -y update && apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
          wget \
-         python \
+         python3.6 \
+         python3-pip \
          nginx \
          ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
-# Here we get all python packages.
-# There's substantial overlap between scipy and numpy that we eliminate by
-# linking them together. Likewise, pip leaves the install caches populated which uses
-# a significant amount of space. These optimizations save a fair amount of space in the
-# image, which reduces start up time.
-RUN wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py && \
-    pip install -r requirements.txt && \
-        (cd /usr/local/lib/python2.7/dist-packages/scipy/.libs; rm *; ln ../../numpy/.libs/* .) && \
-        rm -rf /root/.cache
+RUN pip3 install -r requirements.txt
+RUN pip3 install setuptools
 
 # Set some environment variables. PYTHONUNBUFFERED keeps Python from buffering our standard
 # output stream, which means that logs can be delivered to the user quickly. PYTHONDONTWRITEBYTECODE
