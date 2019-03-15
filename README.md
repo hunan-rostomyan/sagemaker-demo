@@ -1,4 +1,4 @@
-# sm
+# SageMaker
 
 ## Prepare data
 - `./_prepare_data`
