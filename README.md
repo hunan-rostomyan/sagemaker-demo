@@ -43,7 +43,7 @@ Server: nginx/1.10.3 (Ubuntu)
 
 ### Handler
 
-```
+```python
 # python3.6
 
 import json
